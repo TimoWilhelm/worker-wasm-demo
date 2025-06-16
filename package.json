@@ -7,12 +7,14 @@
 		"dev": "wrangler dev",
 		"start": "wrangler dev",
 		"test": "vitest",
-		"cf-typegen": "wrangler types"
+		"cf-typegen": "wrangler types",
+		"wasm": "wasm-pack build my-rust-app --target web --reference-types --out-dir pkg"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.8.19",
 		"typescript": "^5.5.2",
 		"vitest": "~3.2.0",
+		"wasm-pack": "^0.13.1",
 		"wrangler": "^4.20.0"
 	}
 }
