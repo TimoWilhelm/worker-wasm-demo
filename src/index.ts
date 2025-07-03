@@ -1,14 +1,20 @@
-import mod from '../my-rust-app/pkg/my_rust_app_bg.wasm';
-import { greet, initSync } from '../my-rust-app/pkg/my_rust_app';
+import wasmModule from '../my-rust-app/pkg/my_rust_app_bg.wasm';
+import * as imports from '../my-rust-app/pkg/my_rust_app_bg.js';
 
 const memory = new WebAssembly.Memory({
 	initial: 17,
 	maximum: 1000, // 1000 pages (64 MiB)
 });
-initSync({ module: mod, memory });
+
+const instance = new WebAssembly.Instance(wasmModule, {
+	'./my_rust_app_bg.js': imports,
+	env: { memory },
+});
+imports.__wbg_set_wasm(instance.exports);
+(instance.exports.__wbindgen_start as () => void | undefined)?.();
 
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
-		return new Response(greet('World'));
+		return new Response(imports.greet('World'));
 	},
 } satisfies ExportedHandler<Env>;
